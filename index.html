@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PETA REGIONAL EROPA</title>
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- LEAFLET AJAX CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+
+    <style>
+        body { margin: 0; padding: 0; }
+        #maps { height: 100vh; width: 100%; }
+
+        /* Styling Legenda */
+        .info.legend {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 20px;
+            color: #333;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .info.legend h4 {
+            margin: 0 0 5px;
+            color: #2c3e50;
+            font-size: 14px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 3px;
+        }
+
+        /* Styling Custom Icon untuk Emoji Vektor */
+        .custom-marker-icon {
+            background: transparent !important;
+            border: none !important;
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.4));
+        }
+
+        /* Modifikasi Tampilan Kontrol Layer */
+        .leaflet-control-layers-overlays label { margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+
+    <div id="maps"></div>
+
+    <script>
+        // 1. INISIALISASI BASEMAP
+        var map = L.map('maps').setView([50.0, 10.0], 4);
+
+        var OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var SATELIT = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        });
+
+        // 2. FUNGSI POPUP
+        function popUpIbuKota(feature, layer) {
+            if (feature.properties) {
+                var content = "<div style='text-align:center;'><b>" + feature.properties.Capital + "</b><br>" + 
+                              feature.properties.Country + "<br>" + 
+                              "<small><i>" + feature.properties.Region + "</i></small></div>";
+                layer.bindPopup(content);
+            }
+        }
+
+        function popUpTitikTertinggi(feature, layer) {
+            if (feature.properties) {
+                var content = "<div style='text-align:center;'><b>" + feature.properties.Peak_Name + "</b><br>" + 
+                              "Ketinggian: " + feature.properties.Elevation + " mdpl<br>" + 
+                              feature.properties.Country + "<br>" + 
+                              "<small><i>" + feature.properties.Region + "</i></small></div>";
+                layer.bindPopup(content);
+            }
+        }
+
+        function popUpSungai(feature, layer) {
+            if (feature.properties && feature.properties.name) {
+                layer.bindPopup("<b>Sungai:</b> " + feature.properties.name);
+            }
+        }
+
+        // 3. DEKLARASI DATA & LAYER GEOJSON
+        
+        // --- DATA IBU KOTA ---
+        var dataIbuKota = {
+            "type": "FeatureCollection",
+            "name": "IBU KOTA NEGARA",
+            "features": [
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "United Kingdom", "Lon": -0.1, "Capital": "London", "Lat": 5.15074 }, "geometry": { "type": "Point", "coordinates": [ -0.1276, 51.5074 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Ireland", "Lon": -6.0, "Capital": "Dublin", "Lat": 5.33498 }, "geometry": { "type": "Point", "coordinates": [ -6.2603, 53.3498 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "France", "Lon": 2.3522, "Capital": "Paris", "Lat": 4.88566 }, "geometry": { "type": "Point", "coordinates": [ 2.3522, 48.8566 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Germany", "Lon": 10.0, "Capital": "Berlin", "Lat": 5.252 }, "geometry": { "type": "Point", "coordinates": [ 13.405, 52.52 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Netherlands", "Lon": 4.9041, "Capital": "Amsterdam", "Lat": 5.23676 }, "geometry": { "type": "Point", "coordinates": [ 4.9041, 52.3676 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Belgium", "Lon": 4.3517, "Capital": "Brussels", "Lat": 5.08503 }, "geometry": { "type": "Point", "coordinates": [ 4.3517, 50.8503 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Luxembourg", "Lon": 6.1319, "Capital": "Luxembourg", "Lat": 4.96116 }, "geometry": { "type": "Point", "coordinates": [ 6.1319, 49.6116 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Switzerland", "Lon": 7.4474, "Capital": "Bern", "Lat": 4.6948 }, "geometry": { "type": "Point", "coordinates": [ 7.4474, 46.948 ] } },
+            { "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Austria", "Lon": 20.0, "Capital": "Vienna", "Lat": 4.82082 }, "geometry": { "type": "Point", "coordinates": [ 16.3738, 48.2082 ] } },
+            { "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Norway", "Lon": 10.0, "Capital": "Oslo", "Lat": 5.99139 }, "geometry": { "type": "Point", "coordinates": [ 10.7522, 59.9139 ] } },
+            { "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Sweden", "Lon": 20.0, "Capital": "Stockholm", "Lat": 5.93293 }, "geometry": { "type": "Point", "coordinates": [ 18.0686, 59.3293 ] } },
+            { "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Finland", "Lon": 20.0, "Capital": "Helsinki", "Lat": 6.01699 }, "geometry": { "type": "Point", "coordinates": [ 24.9384, 60.1699 ] } },
+            { "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Denmark", "Lon": 10.0, "Capital": "Copenhagen", "Lat": 5.56761 }, "geometry": { "type": "Point", "coordinates": [ 12.5683, 55.6761 ] } },
+            { "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Iceland", "Lon": -20.0, "Capital": "Reykjavik", "Lat": 6.41265 }, "geometry": { "type": "Point", "coordinates": [ -21.8277, 64.1265 ] } }
+            ]
+        };
+
+        var LayerIbuKota = L.geoJSON(dataIbuKota, {
+            onEachFeature: popUpIbuKota,
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.divIcon({
+                        html: '<span style="font-size: 20px;">🏛️</span>',
+                        className: 'custom-marker-icon',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10],
+                        popupAnchor: [0, -10]
+                    })
+                });
+            }
+        }).addTo(map);
+
+        // --- DATA TITIK TERTINGGI ---
+        var dataTitikTertinggi = {
+            "type": "FeatureCollection",
+            "name": "TITIK TERTINGGI",
+            "features": [
+            { "type": "Feature", "properties": { "Elevation": 4808, "Peak_Name": "Mont Blanc", "Region": "Western Europe", "Country": "France" }, "geometry": { "type": "Point", "coordinates": [ 6.8652, 45.8326 ] } },
+            { "type": "Feature", "properties": { "Elevation": 4634, "Peak_Name": "Dufourspitze (Monte Rosa)", "Region": "Western Europe", "Country": "Switzerland" }, "geometry": { "type": "Point", "coordinates": [ 7.8667, 45.9369 ] } },
+            { "type": "Feature", "properties": { "Elevation": 3798, "Peak_Name": "Grossglockner", "Region": "Western Europe", "Country": "Austria" }, "geometry": { "type": "Point", "coordinates": [ 12.6947, 47.0742 ] } },
+            { "type": "Feature", "properties": { "Elevation": 2962, "Peak_Name": "Zugspitze", "Region": "Western Europe", "Country": "Germany" }, "geometry": { "type": "Point", "coordinates": [ 10.9854, 47.4212 ] } },
+            { "type": "Feature", "properties": { "Elevation": 694, "Peak_Name": "Signal de Botrange", "Region": "Western Europe", "Country": "Belgium" }, "geometry": { "type": "Point", "coordinates": [ 6.0928, 50.5017 ] } },
+            { "type": "Feature", "properties": { "Elevation": 560, "Peak_Name": "Kneiff", "Region": "Western Europe", "Country": "Luxembourg" }, "geometry": { "type": "Point", "coordinates": [ 6.0369, 50.1583 ] } },
+            { "type": "Feature", "properties": { "Elevation": 322, "Peak_Name": "Vaalserberg", "Region": "Western Europe", "Country": "Netherlands" }, "geometry": { "type": "Point", "coordinates": [ 6.0213, 50.7532 ] } },
+            { "type": "Feature", "properties": { "Elevation": 2469, "Peak_Name": "Galdhrpiggen", "Region": "Northern Europe", "Country": "Norway" }, "geometry": { "type": "Point", "coordinates": [ 8.3124, 61.6365 ] } },
+            { "type": "Feature", "properties": { "Elevation": 2110, "Peak_Name": "Hvannadalshnokur", "Region": "Northern Europe", "Country": "Iceland" }, "geometry": { "type": "Point", "coordinates": [ -16.6749, 64.0147 ] } },
+            { "type": "Feature", "properties": { "Elevation": 2096, "Peak_Name": "Kebnekaise", "Region": "Northern Europe", "Country": "Sweden" }, "geometry": { "type": "Point", "coordinates": [ 18.5161, 67.9006 ] } },
+            { "type": "Feature", "properties": { "Elevation": 1345, "Peak_Name": "Ben Nevis", "Region": "Northern Europe", "Country": "United Kingdom" }, "geometry": { "type": "Point", "coordinates": [ -5.0036, 56.7969 ] } },
+            { "type": "Feature", "properties": { "Elevation": 1324, "Peak_Name": "Halti", "Region": "Northern Europe", "Country": "Finland" }, "geometry": { "type": "Point", "coordinates": [ 21.265, 69.3081 ] } },
+            { "type": "Feature", "properties": { "Elevation": 1038, "Peak_Name": "Carrauntoohil", "Region": "Northern Europe", "Country": "Ireland" }, "geometry": { "type": "Point", "coordinates": [ -9.7427, 51.9995 ] } },
+            { "type": "Feature", "properties": { "Elevation": 170, "Peak_Name": "Mrllehdj", "Region": "Northern Europe", "Country": "Denmark" }, "geometry": { "type": "Point", "coordinates": [ 9.8258, 55.9775 ] } }
+            ]
+        };
+
+        var LayerTitikTertinggi = L.geoJSON(dataTitikTertinggi, {
+            onEachFeature: popUpTitikTertinggi,
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.divIcon({
+                        html: '<span style="font-size: 20px;">⛰️</span>',
+                        className: 'custom-marker-icon',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10],
+                        popupAnchor: [0, -10]
+                    })
+                });
+            }
+        }).addTo(map);
+
+        // --- DATA SUNGAI ---
+        // (Pastikan file sungai.geojson tetap ada di folder yang sama)
+        var LayerSungai = new L.GeoJSON.AJAX("sungai.geojson", {
+            onEachFeature: popUpSungai,
+            style: { 
+                color: "#2980b9", 
+                weight: 2, 
+                opacity: 0.8 
+            }
+        }).addTo(map);
+
+
+        // 4. KONTROL LEGENDA
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML = "<h4>Legenda Peta Eropa</h4>" +
+                            "<span style='font-size: 16px;'>🏛️</span> Titik Ibu Kota Negara<br>" +
+                            "<span style='font-size: 16px;'>⛰️</span> Titik Tertinggi<br>" +
+                            "<span style='display:inline-block; width: 15px; height: 3px; background-color: #2980b9; margin-right: 5px; vertical-align: middle;'></span> Aliran Sungai";
+            return div;
+        };
+        legend.addTo(map);
+
+
+        // 5. STRUKTUR KONTROL MENU LAYER
+        var baseMaps = {
+            "OpenStreetMap": OSM,
+            "Satelit (Google)": SATELIT
+        };
+
+        var overlayMaps = {
+            "<span style='font-weight: bold; color: #2c3e50;'>-- DATA VEKTOR --</span>": L.layerGroup(),
+            "&nbsp;&nbsp;&nbsp;&nbsp; 🏛️ Ibu Kota Negara": LayerIbuKota,
+            "&nbsp;&nbsp;&nbsp;&nbsp; ⛰️ Titik Tertinggi": LayerTitikTertinggi,
+            "&nbsp;&nbsp;&nbsp;&nbsp; 🌊 Aliran Sungai": LayerSungai
+        };
+
+        L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+        
+        // Non-aktifkan klik pada header menu layer
+        document.addEventListener('DOMContentLoaded', function() {
+            var boldLabels = document.querySelectorAll('.leaflet-control-layers-overlays label:has(span[style*="font-weight: bold"])');
+            boldLabels.forEach(function(label) {
+                label.style.pointerEvents = 'none';
+                var checkbox = label.querySelector('input[type="checkbox"]');
+                if(checkbox) checkbox.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

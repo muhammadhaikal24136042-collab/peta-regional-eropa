@@ -1,0 +1,21 @@
+{
+"type": "FeatureCollection",
+"name": "IBU KOTA NEGARA",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "United Kingdom", "Lon": -0.1, "Capital": "London", "Lat": 5.15074 }, "geometry": { "type": "Point", "coordinates": [ -0.1276, 51.5074 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Ireland", "Lon": -6.0, "Capital": "Dublin", "Lat": 5.33498 }, "geometry": { "type": "Point", "coordinates": [ -6.2603, 53.3498 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "France", "Lon": 2.3522, "Capital": "Paris", "Lat": 4.88566 }, "geometry": { "type": "Point", "coordinates": [ 2.3522, 48.8566 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Germany", "Lon": 10.0, "Capital": "Berlin", "Lat": 5.252 }, "geometry": { "type": "Point", "coordinates": [ 13.405, 52.52 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Netherlands", "Lon": 4.9041, "Capital": "Amsterdam", "Lat": 5.23676 }, "geometry": { "type": "Point", "coordinates": [ 4.9041, 52.3676 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Belgium", "Lon": 4.3517, "Capital": "Brussels", "Lat": 5.08503 }, "geometry": { "type": "Point", "coordinates": [ 4.3517, 50.8503 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Luxembourg", "Lon": 6.1319, "Capital": "Luxembourg", "Lat": 4.96116 }, "geometry": { "type": "Point", "coordinates": [ 6.1319, 49.6116 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Switzerland", "Lon": 7.4474, "Capital": "Bern", "Lat": 4.6948 }, "geometry": { "type": "Point", "coordinates": [ 7.4474, 46.948 ] } },
+{ "type": "Feature", "properties": { "Region": "Western Europe", "Country": "Austria", "Lon": 20.0, "Capital": "Vienna", "Lat": 4.82082 }, "geometry": { "type": "Point", "coordinates": [ 16.3738, 48.2082 ] } },
+{ "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Norway", "Lon": 10.0, "Capital": "Oslo", "Lat": 5.99139 }, "geometry": { "type": "Point", "coordinates": [ 10.7522, 59.9139 ] } },
+{ "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Sweden", "Lon": 20.0, "Capital": "Stockholm", "Lat": 5.93293 }, "geometry": { "type": "Point", "coordinates": [ 18.0686, 59.3293 ] } },
+{ "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Finland", "Lon": 20.0, "Capital": "Helsinki", "Lat": 6.01699 }, "geometry": { "type": "Point", "coordinates": [ 24.9384, 60.1699 ] } },
+{ "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Denmark", "Lon": 10.0, "Capital": "Copenhagen", "Lat": 5.56761 }, "geometry": { "type": "Point", "coordinates": [ 12.5683, 55.6761 ] } },
+{ "type": "Feature", "properties": { "Region": "Northern Europe", "Country": "Iceland", "Lon": -20.0, "Capital": "Reykjavik", "Lat": 6.41265 }, "geometry": { "type": "Point", "coordinates": [ -21.8277, 64.1265 ] } }
+]
+}
